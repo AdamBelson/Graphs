@@ -1,0 +1,49 @@
+<html  ng-app="graphApp">
+
+<head>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+
+  <h2>Graph</h2>
+  <body ng-controller="MainCtrl as ctrl">
+  
+  <div>{{ctrl.myData}}</div>
+  
+  <bars-chart chartdata="[23,33,12,34,65,34,76,87,445,34,3,2,4,45,45,65,5]" ></bars-chart>
+
+  <!--script src="/static/js/app.js"></script-->
+  <script type="text/javascript">
+  angular.module('graphApp', [])
+    .controller('MainCtrl', [function() {
+      var self = this;
+	  self.myData = [23,33,12,34,65,34,76,87,445,34,3,2,4,45,45,65,5];
+    }])
+	.directive('barsChart', function ($parse) {
+     
+     var directiveDefinitionObject = {
+         restrict: 'E',
+         replace: false,
+		 scope: {chartdata: '='},
+         link: function (scope, element, attrs) {
+
+           var data = attrs.chartdata.split(',');
+           
+           var chart = d3.select(element[0]);
+		   
+            chart.append("div").attr("class", "chart")
+             .selectAll('div')
+             .data(data).enter().append("div")
+             .transition().ease("elastic")
+             .style("width", function(d) { return d + "%"; })
+             .text(function(d) { return d + "%"; });
+
+         } 
+      };
+      return directiveDefinitionObject;
+   });
+</script>
+
+  
+</html>
